@@ -4,16 +4,18 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SendMail {
     private SendMail(){}
     public static void getSendEmail(String toUserMessage,String email){
-        Logger logger = Logger.getLogger(SendMail.class.getName());
+        Logger logger = LogManager.getLogger(SendMail.class);
         String to = email;
 
-        String from = "carcompany78@gmail.com";
+        final String from = "carcompany78@gmail.com";
 
         // Assuming you are sending email from through gmails smtp
         String host = "smtp.gmail.com";
@@ -67,15 +69,16 @@ public class SendMail {
             logger.log (Level.INFO,"sending...");
             // Send message
             Transport.send(message);
-            logger.log(Level.INFO,"Sent message successfully....");
+            logger.log(Level.INFO,"Sent message successfully....,We will contact you");
 
-        } catch(MessagingException mex)
-
-        {
-            mex.printStackTrace();
+        }  catch(Exception e) {
+   
+            logger.log(Level.ERROR, "Error sending email: " + e.getMessage());
+      
         }
+}
 
     }
 
 
-}
+

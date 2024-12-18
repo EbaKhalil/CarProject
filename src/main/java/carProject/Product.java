@@ -1,7 +1,8 @@
 package carProject;
 
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 public class Product {
     private String name;
     private String description;
@@ -11,7 +12,8 @@ public class Product {
     private int id;
     private String image;
 
-   
+       private static final Logger LOGGER = LogManager.getLogger(Product.class);
+
     public Product( int id,String name, String description, double price, String category, String available,String image) {
         
     	this.id=id;
@@ -68,11 +70,11 @@ public class Product {
 
 
     public void displayProductDetails() {
-        System.out.println("Name: " + name);
-        System.out.println("Description: " + description);
-        System.out.println("Category: " + category);
-        System.out.println("Price: " + price);
-        System.out.println("Availability: " + available);
+        LOGGER.info("Name: " + name);
+        LOGGER.info("Description: " + description);
+        LOGGER.info("Category: " + category);
+        LOGGER.info("Price: " + price);
+        LOGGER.info("Availability: " + available);
 }
 
 

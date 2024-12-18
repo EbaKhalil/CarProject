@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class ProductMethods {
-   
+       private static final Logger LOGGER = LogManager.getLogger(ProductMethods.class);
+
     
     public ProductMethods() {
 		super();
@@ -26,7 +30,7 @@ public class ProductMethods {
 		String productname=string;
 		String productcategory=string;
 		 for (Product product : productlist) {
-             if (product.getName().equals(productname)||product.getCategory().equals(productcategory)) {
+             if (product.getName().equalsIgnoreCase(productname)||product.getCategory().equalsIgnoreCase(productcategory)) {
                  return true;
              }
          }
@@ -48,55 +52,49 @@ public class ProductMethods {
 		
 	}
 	public List<Product> deleteproducts(List<Product> productlist, int id) {
-		 int i=0;
-		for (Product product : productlist) {
-             if (product.getid()==id) {
-            	 productlist.remove(product);
-            	 System.out.println("deleted successfully");
-            	 System.out.println("============================================================");
-
-            	 break;
-             }
-         }
-		 for (Product product : productlist) {
-           i++;
-           product.setid(i);
-         }
-				return productlist;
-	}
-	public List<Product> addproducts(List<Product> productlist,String productname, String description, double price,
-			String category, String available ) {
-	 	  int id=countProducts(productlist);
-		productlist.add(new Product(id,productname,description,price,category,available,""));
-		System.out.println("==========================================================================");
-		System.out.println("added successfully");
-		System.out.println("==========================================================================");
-
-		return productlist;
-	}
-	public List<Product> deletecategory(List<Product> productlist, String string) {
-		for (Product product : productlist) {
-            if (product.getCategory().equalsIgnoreCase(string)) {
-           	 productlist.remove(product);
-           	
+        int i = 0;
+        for (Product product : productlist) {
+            if (product.getid() == id) {
+                productlist.remove(product);
+                LOGGER.info("Deleted successfully");
+                LOGGER.info("============================================================");
+                break;
             }
         }
-				return productlist;
+        for (Product product : productlist) {
+            i++;
+            product.setid(i);
+        }
+        return productlist;
+    }
+	 public List<Product> addproducts(List<Product> productlist, String productname, String description, double price, String category, String available) {
+        int id = countProducts(productlist);
+        productlist.add(new Product(id, productname, description, price, category, available, ""));
+        LOGGER.info("==========================================================================");
+        LOGGER.info("Added successfully");
+        LOGGER.info("==========================================================================");
+        return productlist;
+    }
+	public List<Product> deletecategory(List<Product> productlist, String string) {
+		List<Product> toRemove = new ArrayList<>();
+    for (Product product : productlist) {
+        if (product.getCategory().equalsIgnoreCase(string)) {
+            toRemove.add(product);
+        }
+    }
+    productlist.removeAll(toRemove);
+    return productlist;
+
 	}
 	public void printproducts(List<Product> productlist) {
-      	 System.out.println("==================================================================");
+        LOGGER.info("==================================================================");
+        for (Product product : productlist) {
+            String s = String.valueOf(product.getid()) + ". " + "product name: " + product.getName();
+            LOGGER.info(s);
+        }
+        LOGGER.info("==================================================================");
+    }
 
-		 for (Product product : productlist) {
-
-                  
-	        // String s=String.valueOf(product.getid())+". "+"product name: "+product.getName()+", "+"product Description: "+product.getDescription()+", "+"product Category: "+product.getCategory()+", "+"product price: "+product.getPrice()+", "+"product Available: "+product.getAvailable();
-	            	String s=String.valueOf(product.getid())+". "+"product name: "+product.getName();
-			 System.out.println(s);
-	            
-	         }	
-       	 System.out.println("==================================================================");
-
-	}
 	public int countProducts(List<Product> productlist) {
 		int i=0;
 		 for (Product product : productlist) {
@@ -124,20 +122,17 @@ public Product informationProduct(List<Product> productlist,int id) {
 
 
 
-	public void viewproductCategory(List<Product> productlist, String category) {
-     	 System.out.println("==================================================================");
-
-		for (Product product : productlist) {
-           if(product.getCategory().equalsIgnoreCase(category)) {
-        	  // String s=String.valueOf(product.getid())+". "+"product name: "+product.getName()+", "+"product Description: "+product.getDescription()+", "+"product Category: "+product.getCategory()+", "+"product price: "+product.getPrice()+", "+"product Available: "+product.getAvailable();
-          	  String s=String.valueOf(product.getid())+". "+"product name: "+product.getName();
-        	   System.out.println(s);
-}
-		}
-     	 System.out.println("==================================================================");
-
-			
-	}
+	
+    public void viewproductCategory(List<Product> productlist, String category) {
+        LOGGER.info("==================================================================");
+        for (Product product : productlist) {
+            if (product.getCategory().equalsIgnoreCase(category)) {
+                String s = String.valueOf(product.getid()) + ". " + "product name: " + product.getName();
+                LOGGER.info(s);
+            }
+        }
+        LOGGER.info("==================================================================");
+    }
 	
 
 
@@ -152,21 +147,19 @@ public Product informationProduct(List<Product> productlist,int id) {
         for (Product product : productlist) {
             uniqueCategories.add(product.getCategory());
         }
-      System.out.println("==================================================================");
-  	String[] cate = new String[3];
-int i=0;
-int j=i+1;
+        LOGGER.info("==================================================================");
+        String[] cate = new String[uniqueCategories.size()];
+        int i = 0;
+        int j = i + 1;
         for (String category : uniqueCategories) {
-        	System.out.print(j+". ");
-            System.out.println(category);
-            cate[i]=category;
+            LOGGER.info(j + ". " + category);
+            cate[i] = category;
             i++;
-            j=i+1;
+            j = i + 1;
         }
-      System.out.println("==================================================================");
-
-		return cate;
-	}
+        LOGGER.info("==================================================================");
+        return cate;
+    }
 
 
 
@@ -192,21 +185,20 @@ int j=i+1;
 		
 		return productlist2;
 	}
-	public  boolean searchproduct(List<Product> productlist, int id) {
-
-		for (Product product : productlist) {
-			if(product.getid()==id) {
-				 System.out.println("Name: " + product.getName());
-			        System.out.println("Description: " + product.getDescription());
-			        System.out.println("Category: " + product.getCategory());
-			        System.out.println("Price: " + product.getPrice());
-			        openimage(product.getimage());
-			        return true;
-			}
+	public boolean searchproduct(List<Product> productlist, int id) {
+        for (Product product : productlist) {
+            if (product.getid() == id) {
+                LOGGER.info("Name: " + product.getName());
+                LOGGER.info("Description: " + product.getDescription());
+                LOGGER.info("Category: " + product.getCategory());
+                LOGGER.info("Price: " + product.getPrice());
+                openimage(product.getimage());
+                return true;
+            }
         }
-		return false;
-		
-	}
+        return false;
+    }
+
 	
 	
 		
@@ -234,23 +226,21 @@ for (Product product : orderedProducts) {
 
 
 
-	public int searchproductname(List<Product> productlist, String nameproduct) {
-		int id = 0;
-		for (Product product : productlist) {
-		   
-			if(product.getName().equalsIgnoreCase(nameproduct)) {
-               id=product.getid();
-				 System.out.println("Name: " + product.getName());
-			        System.out.println("Description: " + product.getDescription());
-			        System.out.println("Category: " + product.getCategory());
-			        System.out.println("Price: " + product.getPrice());
-			        openimage(product.getimage());
-
-			        break;
-			}
-		}
-		return id;
-	}
+public int searchproductname(List<Product> productlist, String nameproduct) {
+        int id = 0;
+        for (Product product : productlist) {
+            if (product.getName().equalsIgnoreCase(nameproduct)) {
+                id = product.getid();
+                LOGGER.info("Name: " + product.getName());
+                LOGGER.info("Description: " + product.getDescription());
+                LOGGER.info("Category: " + product.getCategory());
+                LOGGER.info("Price: " + product.getPrice());
+                openimage(product.getimage());
+                break;
+            }
+        }
+        return id;
+    }
 
 
 
@@ -259,22 +249,19 @@ for (Product product : orderedProducts) {
 
 
 
-	public void openimage(String imagePath) {
-		// Check if Desktop is supported on the current platform
-	       if (Desktop.isDesktopSupported()) {
-	           Desktop desktop = Desktop.getDesktop();
-	           try {
-	               File imageFile = new File(imagePath);
-	               desktop.open(imageFile);
-
-	           } catch (IOException e) {
-	               e.printStackTrace();
-	           }
-	       } else {
-	           System.out.println("Desktop not supported.");
-	       }
-		
-	}
+	 public void openimage(String imagePath) {
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                File imageFile = new File(imagePath);
+                desktop.open(imageFile);
+            } catch (IOException e) {
+                LOGGER.warn("Error opening image: " + e.getMessage());
+            }
+        } else {
+            LOGGER.warn("Desktop not supported.");
+        }
+    }
 	
 	
 }
